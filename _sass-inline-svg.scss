@@ -172,7 +172,7 @@ $SVG-URL: true !default;
 	$icon,
 	// $position: 0 50%, 
 	// $size: 2rem 2rem, 
-	$repeat: no-repeat, 
+	// $repeat: no-repeat, 
 	$colorF: $SVG-COLOR-FILL, 
 	$colorS: $SVG-COLOR-STROKE,
 	$fillcolor: $colorF,
@@ -182,7 +182,7 @@ $SVG-URL: true !default;
 	// @if(type-of($repeat) == string) { $repeat: unquote($repeat); }
 	// @if(type-of($position) == string) { $position: unquote($position); }
 	// @if(type-of($size) == string) { $size: unquote($size); }
-	background-repeat: $repeat;
+	background-repeat: no-repeat;
 	// background-position: $position;
 	// background-size: $size;
 }
