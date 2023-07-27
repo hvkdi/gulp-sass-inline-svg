@@ -122,7 +122,7 @@ function addVariables(filePath, fileContent) {
 	// Allow fill values that are black to be set with sass variable.
 	var $fills = $('[fill]').not('[fill=none]');
 	if ($fills.length > 0) {
-		var $fillsToChange = $('[fill="#000"], [fill="#000000"], [fill="rgb(0,0,0)"]');
+		var $fillsToChange = $fills;
 		$fillsToChange.attr('fill', '#{$fillcolor}');
 	} else {
 		$('svg').attr('fill', '#{$fillcolor}');
