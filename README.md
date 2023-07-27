@@ -2,6 +2,8 @@
 
 Updated to support Sass 3.5+ `get-function` requirements
 
+Forked this gulp plugin: https://github.com/chriswburke/gulp-sass-inline-svg
+
 ---
 Gulp plugin for converting svg files into sass functions in order inline svgs in
 your css files and use as background-image icons. Based on the gulp plugin
