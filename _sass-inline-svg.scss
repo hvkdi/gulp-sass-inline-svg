@@ -90,16 +90,18 @@ $SVG-URL: true !default;
 	} @else{
 		@if(type-of($colorF) == "color"){
 			$fillcolor: uri-encode-color($fillcolor);
-		} @else if(type-of($colorS) == "color"){
-			$strokecolor: uri-encode-color($strokecolor);
 		} @else if ($colorF == "none"){
 			$fillcolor: none;
-		} @else if ($colorS == "none"){
+		}
+		@if(type-of($colorS) == "color"){
+			$strokecolor: uri-encode-color($strokecolor);
+		}  @else if ($colorS == "none"){
 			$strokecolor: none;
-		} @else {
+		} 
+		@else {
 			$fillcolor: uri-encode-color(#000);
 			$strokecolor: uri-encode-color(#000);
-			@warn "Color value is not valid, defaulting to #000. You can use 'null' to use the svg's original color";
+			@warn "Color value is not valid, defaulting to #000.";
 		}
 
 		$uri-string: call(get-function($functionname), $fillcolor, $strokecolor);
