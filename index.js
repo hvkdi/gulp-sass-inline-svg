@@ -128,8 +128,8 @@ function addVariables(filePath, fileContent) {
 		$('svg').attr('fill', '#{$fillcolor}');
 	}
 
-	// Allow stroke values that are black to be set with a sass variable
-	var $strokes = $('[stroke="#000"], [stroke="#000000"], [stroke="rgb(0,0,0)"]');
+	// Allow stroke values that are any color to be set with a sass variable
+	var $strokes = $('[stroke]');
 	$strokes.attr('stroke', '#{$strokecolor}');
 
 	return $.html('svg'); //return only the svg
