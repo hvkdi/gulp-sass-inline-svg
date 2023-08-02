@@ -11,6 +11,7 @@
 /// default color, if the inline-svg() mixin gets no color parameter
 /// @type {color}
 $SVG-COLOR-FILL: null !default;
+$SVG-COLOR-FILL-CIRCLE: null !default;
 $SVG-COLOR-STROKE: null !default;
 
 /// defines whether the inline-svg() function returns only the data string or the url as well
@@ -32,20 +33,22 @@ $SVG-URL: true !default;
 /// returns an uri-encoded color value
 /// if possible, the color is reduced to rgb, otherwise rgba
 /// @return {color} (uri-encoded)
-/// fill attributes
-@function uri-encode-color($colorF){
-	@if(alpha($colorF) != 1){
-		@return "rgba%28" + round(red($colorF)) + "%2C" + round(green($colorF)) + "%2C" + round(blue($colorF)) + "%2C" + (alpha($colorF)) + "%29";
-	}@else{
-		@return "rgb%28" + round(red($colorF)) + "%2C" + round(green($colorF)) + "%2C" + round(blue($colorF)) + "%29";
+
+$colorF: $SVG-COLOR-FILL;
+$colorFC: $SVG-COLOR-FILL-CIRCLE;
+$colorST: $SVG-COLOR-STROKE;
+$colors: ($colorF, $colorFC, $colorST);
+
+@function uri-encode-color($color){
+
+	@each $color in $colors {
+		$color: $colors;
 	}
-}
-/// stroke attributes
-@function uri-encode-color($colorS){
-	@if(alpha($colorS) != 1){
-		@return "rgba%28" + round(red($colorS)) + "%2C" + round(green($colorS)) + "%2C" + round(blue($colorS)) + "%2C" + (alpha($colorS)) + "%29";
+
+	@if(alpha($color) != 1){
+		@return "rgba%28" + round(red($color)) + "%2C" + round(green($color)) + "%2C" + round(blue($color)) + "%2C" + (alpha($color)) + "%29";
 	}@else{
-		@return "rgb%28" + round(red($colorS)) + "%2C" + round(green($colorS)) + "%2C" + round(blue($colorS)) + "%29";
+		@return "rgb%28" + round(red($color)) + "%2C" + round(green($color)) + "%2C" + round(blue($color)) + "%29";
 	}
 }
 
@@ -55,8 +58,7 @@ $SVG-URL: true !default;
 /// different color
 ///
 /// @param {filename} $icon - name of the svg file
-/// @param {color} $colorF - color used for both black fill attributes
-/// @param {color} $colorS - color used for both black stroke attributes
+/// @param {color} $color - color used for both black fill attributes
 /// @param {color} $fillcolor - color for black fill attributes
 /// @param {color} $strokecolor - color for black stroke attributes
 ///
@@ -74,12 +76,14 @@ $SVG-URL: true !default;
 /// @return {image} - uri encoded svg to be used as a background-url
 @function inline-svg(
 	$icon,
-	$colorF: $SVG-COLOR-FILL, 
-	$colorS: $SVG-COLOR-STROKE,
-	$fillcolor: $colorF,
-	$strokecolor: $colorS, 
+	$colorF,
+	$colorFC,
+	$colorST, 
 	$url: $SVG-URL
 ){
+	$fillcolor: $colorF;
+	$circlefillcolor: $colorFC;
+	$strokecolor: $colorST;
 	$functionname: $icon;
 
 	//some sanity checks
@@ -93,10 +97,15 @@ $SVG-URL: true !default;
 		} @else if ($colorF == "none"){
 			$fillcolor: none;
 		}
-		@if(type-of($colorS) == "color"){
+		@if(type-of($colorST) == "color"){
 			$strokecolor: uri-encode-color($strokecolor);
-		}  @else if ($colorS == "none"){
+		}  @else if ($colorST == "none"){
 			$strokecolor: none;
+		} 
+		@if(type-of($colorFC) == "color"){
+			$circlefillcolor: uri-encode-color($circlefillcolor);
+		}  @else if ($colorFC == "none"){
+			$circlefillcolor: none;
 		} 
 		@else {
 			$fillcolor: uri-encode-color(#000);
@@ -104,7 +113,7 @@ $SVG-URL: true !default;
 			@warn "Color value is not valid, defaulting to #000.";
 		}
 
-		$uri-string: call(get-function($functionname), $fillcolor, $strokecolor);
+		$uri-string: call(get-function($functionname), $fillcolor, $circlefillcolor, $strokecolor);
 		@if $url {
 			@return url($uri-string);
 		} @else {
@@ -148,8 +157,7 @@ $SVG-URL: true !default;
 
 /// convenience mixin for creating a svg icon with usefull default values
 /// @param {filename} $icon - filename of the svg icon
-/// @param {color} $colorF - color to apply to black fills
-/// @param {color} $colorS - color to apply to black strokes 
+/// @param {color} $color - color to apply to black fills
 /// @param {background-position} $position - sets the background position
 /// @param {background-size} $size - sets the background-size property
 /// @param {background-repeat} $repeat - sets the background-repeat property
@@ -175,12 +183,15 @@ $SVG-URL: true !default;
 	// $position: 0 50%, 
 	// $size: 2rem 2rem, 
 	// $repeat: no-repeat, 
-	$colorF: $SVG-COLOR-FILL, 
-	$colorS: $SVG-COLOR-STROKE,
+	$colorF,
+	$colorFC,
+	$colorST,
 	$fillcolor: $colorF,
-	$strokecolor: $colorS, 
+	$circlefillcolor: $colorFC,
+	$strokecolor: $colorST, 
 ) { 
-	background-image: inline-svg($icon, $fillcolor, $strokecolor, $url: true);
+
+	background-image: inline-svg($icon, $fillcolor, $circlefillcolor, $strokecolor, $url: true);
 	// @if(type-of($repeat) == string) { $repeat: unquote($repeat); }
 	// @if(type-of($position) == string) { $position: unquote($position); }
 	// @if(type-of($size) == string) { $size: unquote($size); }
