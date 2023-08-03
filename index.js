@@ -144,5 +144,5 @@ function addVariables(filePath, fileContent) {
  * @returns (string) The sass function as a string
  */
 function assembleDataString(fileName, inlineSvg) {
-	return '@function ' + fileName + '($fillcolor, $strokecolor){ @return "' + URI_PREFIX + inlineSvg + '";}\n';
+	return '@function ' + fileName + '($fillcolor, $circlefillcolor, $strokecolor){ @return "' + URI_PREFIX + inlineSvg + '";}\n';
 }
